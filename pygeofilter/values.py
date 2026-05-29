@@ -44,7 +44,6 @@ class Geometry:
     def __eq__(self, o: object) -> bool:
         return shape(self).__geo_interface__ == shape(o).__geo_interface__
 
-
 @dataclass
 class Envelope:
     x1: float

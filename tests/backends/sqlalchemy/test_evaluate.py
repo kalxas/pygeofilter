@@ -401,6 +401,14 @@ def test_intersects_envelope(db_session):
 def test_bbox(db_session):
     evaluate(db_session, "BBOX(geometry, 0, 0, 1, 1, '4326')", ("A",))
 
+def test_bbox_cql2(db_session):
+    evaluate(db_session, "S_INTERSECTS(geometry, BBOX(0, 0, 1, 1))", ("A",), None, parse_cql_text)
+
+def test_empty_bbox_cql2(db_session):
+    evaluate(db_session, "S_INTERSECTS(geometry, BBOX(178, 88, 181, 91))", (), None, parse_cql_text)
+
+def test_global_bbox_cql2(db_session):
+    evaluate(db_session, "S_INTERSECTS(geometry,BBOX(-180,-90,180,90))", ("A", "B",), None, parse_cql_text)
 
 # arithmethic expressions
 

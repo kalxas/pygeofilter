@@ -5,6 +5,23 @@ from dateparser.timezone_parser import StaticTzInfo
 from pygeofilter import ast, values
 from pygeofilter.parsers.cql2_text import parse
 
+def test_bbox():
+    result = parse("BBOX(160.6,-55.95,-170,-25.89)")
+    assert result == values.Envelope(160.6,-170,-55.95,-25.89)
+
+def test_intersect_bbox():
+    result = parse("S_INTERSECTS(geometry,BBOX(-180,-90,180,90))")
+    assert result == ast.GeometryIntersects(
+        ast.Attribute("geometry"),
+        values.Envelope(-180, 180, -90, 90)
+    )
+
+def test_intersect_point():
+    result = parse("S_INTERSECTS(geometry,POINT(7.02 49.92))")
+    assert result == ast.GeometryIntersects(
+        ast.Attribute("geometry"),
+        values.Geometry({'type': 'Point', 'coordinates': (7.02, 49.92)})
+    )
 
 def test_attribute_eq_true_uppercase():
     result = parse("attr = TRUE")
