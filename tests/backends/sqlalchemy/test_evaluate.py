@@ -20,6 +20,7 @@ from sqlalchemy.sql import func, select
 from pygeofilter.backends.sqlalchemy.evaluate import to_filter
 from pygeofilter.parsers.ecql import parse as parse_ecql
 from pygeofilter.parsers.cql2_text import parse as parse_cql_text
+from pygeofilter.parsers.cql2_json import parse as parse_cql2_json
 
 Base = declarative_base()
 
@@ -296,9 +297,20 @@ def test_string_not_null(db_session):
     evaluate(db_session, "intAttribute IS NOT NULL", ("A",))
 
 # CASEI
-def test_casei(db_session):
+def test_casei_equals(db_session):
     evaluate(db_session, "CASEI(strAttribute) = CASEI('aaa')", ("A",), None, parse_cql_text)
 
+def test_casei_like(db_session):
+    evaluate(db_session, "CASEI(strAttribute) LIKE CASEI('aaa')", ("A",), None, parse_cql_text)
+
+def test_casei_notlike(db_session):
+    evaluate(db_session, "CASEI(strAttribute) NOT LIKE CASEI('aaa')", ("B", ), None, parse_cql_text)
+
+def test_casei_in(db_session):
+    evaluate(db_session, "CASEI(strAttribute) IN (CASEI('aaa'), CASEI('bbb'))", ("A", "B", ), None, parse_cql_text)
+
+def test_casei_json_like(db_session):
+    evaluate(db_session, '{"op": "like", "args": [ {"op": "casei", "args": [{"property": "strAttribute"}]}, {"op": "casei", "args": ["AAA"]} ] }', ("A", ), None, parse_cql2_json)
 
 # temporal predicates
 
