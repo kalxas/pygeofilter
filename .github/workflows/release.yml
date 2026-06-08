@@ -34,11 +34,45 @@ jobs:
         run: |
           echo '__version__ = "${{ inputs.version }}"' > pygeofilter/version.py
 
+      - name: Update CHANGELOG.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            NOTES=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+              -f tag_name="v${{ inputs.version }}" \
+              -f previous_tag_name="$LAST_TAG" \
+              -f target_commitish="main" \
+              --jq .body)
+          else
+            NOTES=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+              -f tag_name="v${{ inputs.version }}" \
+              -f target_commitish="main" \
+              --jq .body)
+          fi
+
+          HEADER="# Changelog"
+          DATE=$(date +%Y-%m-%d)
+          SECTION="## [${{ inputs.version }}](https://github.com/${{ github.repository }}/compare/${LAST_TAG}...v${{ inputs.version }}) ($DATE)"
+
+          {
+            echo "$HEADER"
+            echo
+            echo "$SECTION"
+            echo
+            echo "$NOTES"
+            echo
+            # append everything after the "# Changelog" header from the existing file
+            tail -n +2 CHANGELOG.md
+          } > CHANGELOG.new.md
+          mv CHANGELOG.new.md CHANGELOG.md
+
       - name: Commit, tag, push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pygeofilter/version.py
+          git add pygeofilter/version.py CHANGELOG.md
           git commit -m "Release ${{ inputs.version }}"
           git tag "v${{ inputs.version }}"
           git push origin HEAD --tags

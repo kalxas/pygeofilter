@@ -206,7 +206,7 @@ Equal(lhs=ATTRIBUTE title, rhs='birds')
 
 ## Releasing
 
-Releases are done via the [release workflow](https://github.com/geopython/pygeofilter/actions/workflows/release.yml). A maintainer triggers it from the Actions tab, provides the new version number (e.g. `0.4.0`), and the workflow takes care of bumping `version.py`, tagging, creating a GitHub Release, and publishing to PyPI.
+Releases are done via the [release workflow](https://github.com/geopython/pygeofilter/actions/workflows/release.yml). A maintainer triggers it from the Actions tab, provides the new version number (e.g. `0.4.0`), and the workflow takes care of bumping `version.py`, updating `CHANGELOG.md` (auto-generated from merged PRs), tagging, creating a GitHub Release, and publishing to PyPI.
 
 ## Testing
 
