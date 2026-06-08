@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 from dateparser.timezone_parser import StaticTzInfo
 
@@ -201,6 +201,12 @@ def test_attribute_before():
         datetime(2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))),
     )
 
+def test_attribute_lt_date():
+    result = parse("attr < DATE('2000-01-01')")
+    assert result == ast.LessThan(
+        ast.Attribute("attr"),
+        date(2000, 1, 1),
+    )
 
 def test_attribute_t_intersects():
     # Using INTERVAL function with properly quoted timestamps

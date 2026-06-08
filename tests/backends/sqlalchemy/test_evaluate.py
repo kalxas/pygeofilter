@@ -319,6 +319,9 @@ def test_casei_json_like(db_session):
 
 # temporal predicates
 
+def test_date_gte(db_session):
+    evaluate(db_session, "datetimeAttribute >= DATE('2000-01-01')", ("A", "B",), None, parse_cql_text)
+
 
 def test_before(db_session):
     evaluate(db_session, "datetimeAttribute BEFORE 2000-01-01T00:00:01Z", ("A",))
