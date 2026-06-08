@@ -59,7 +59,6 @@
           | expression "IS"i "NOT"i "NULL"i                                  -> not_null
           | "INCLUDE"i                                                       -> include
           | "EXCLUDE"i                                                       -> exclude
-          | bbox
           | spatial_predicate
           | temporal_predicate
 
@@ -122,6 +121,7 @@ func.2: attribute "(" expression ("," expression)* ")" -> function
         | SINGLE_QUOTED
         | ewkt_geometry                                                     -> geometry
         | envelope
+        | bbox
 
 ?full_number: number
             | "-" number                                                    -> neg
