@@ -40,7 +40,7 @@ dev = [
     "ruff",
     "pytest",
     "pytest-django",
-    "mypy<=1.10.0",
+    "mypy",
     "types-dateparser",
     "pre-commit",
 ]

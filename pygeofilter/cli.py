@@ -27,6 +27,7 @@
 
 import logging
 import sys
+from typing import Any
 
 import click
 
@@ -40,7 +41,7 @@ from .version import __version__
 
 __all__ = ["__version__"]
 
-PARSERS = {
+PARSERS: dict[str, Any] = {
     'cql_json': parse_cql_json,
     'cql2_json': parse_cql2_json,
     'cql2_text': parse_cql2_text,

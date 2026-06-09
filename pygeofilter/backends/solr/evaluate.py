@@ -528,7 +528,7 @@ def to_filter(
     """Shorthand function to convert a pygeofilter AST to an Apache Solr
     filter structure.
     """
-    return SOLRDSLEvaluator(attribute_map, Version(version) if version else None).evaluate(root)
+    return SOLRDSLEvaluator(attribute_map, Version(str(version)) if version else None).evaluate(root)
 
 
 def unwrap_query(obj):
