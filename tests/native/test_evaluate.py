@@ -107,9 +107,9 @@ def data_json():
 
 def filter_json(ast, data):
     attr_map = {"point_attr": "geometry", "*": "properties.*"}
-    filter_expr = NativeEvaluator(math.__dict__, attr_map, use_getattr=False).evaluate(
-        ast
-    )
+    filter_expr = NativeEvaluator(
+        math.__dict__, attr_map, use_getattr=False
+    ).evaluate(ast)
     return [record for record in data if filter_expr(record)]
 
 
@@ -277,12 +277,16 @@ def test_temporal(data):
     result = filter_(parse("date_attr BEFORE 2010-01-08T00:00:00.00Z"), data)
     assert len(result) == 1 and result[0] is data[0]
 
-    result = filter_(parse("date_attr AFTER 2010-01-08T00:00:00.00+01:00"), data)
+    result = filter_(
+        parse("date_attr AFTER 2010-01-08T00:00:00.00+01:00"), data
+    )
     assert len(result) == 1 and result[0] is data[1]
 
 
 def test_temporal_json(data_json):
-    result = filter_json(parse("date_attr BEFORE 2010-01-08T00:00:00.00Z"), data_json)
+    result = filter_json(
+        parse("date_attr BEFORE 2010-01-08T00:00:00.00Z"), data_json
+    )
     assert len(result) == 1 and result[0] is data_json[0]
 
     result = filter_json(

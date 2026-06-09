@@ -148,7 +148,11 @@ class NativeEvaluator(Evaluator):
     def like(self, node, lhs):
         maybe_not_inv = "" if node.not_ else "not "
         regex = like_pattern_to_re(
-            node.pattern, node.nocase, node.wildcard, node.singlechar, node.escapechar
+            node.pattern,
+            node.nocase,
+            node.wildcard,
+            node.singlechar,
+            node.escapechar,
         )
         key = self._add_local(regex)
         return f"({key}.match({lhs}) is {maybe_not_inv}None)"
@@ -192,11 +196,16 @@ class NativeEvaluator(Evaluator):
 
     @handle(ast.SpatialComparisonPredicate, subclasses=True)
     def spatial_operation(self, node, lhs, rhs):
-        return f"(getattr(ensure_spatial({lhs}), " f"{node.op.value.lower()!r})({rhs}))"
+        return (
+            f"(getattr(ensure_spatial({lhs}), "
+            f"{node.op.value.lower()!r})({rhs}))"
+        )
 
     @handle(ast.Relate)
     def spatial_pattern(self, node, lhs, rhs):
-        return f"(ensure_spatial({lhs}).relate_pattern({rhs}, {node.pattern!r}))"
+        return (
+            f"(ensure_spatial({lhs}).relate_pattern({rhs}, {node.pattern!r}))"
+        )
 
     @handle(ast.BBox)
     def bbox(self, node, lhs):
@@ -246,7 +255,9 @@ class NativeEvaluator(Evaluator):
     @handle(values.Envelope)
     def envelope(self, node):
         key = self._add_local(
-            shapely.geometry.Polygon.from_bounds(node.x1, node.y1, node.x2, node.y2)
+            shapely.geometry.Polygon.from_bounds(
+                node.x1, node.y1, node.x2, node.y2
+            )
         )
         return key
 
@@ -264,7 +275,8 @@ class NativeEvaluator(Evaluator):
         }
         if not set(globals_).isdisjoint(set(self.function_map)):
             raise ValueError(
-                f"globals collision {list(globals_)} and " f"{list(self.function_map)}"
+                f"globals collision {list(globals_)} and "
+                f"{list(self.function_map)}"
             )
 
         globals_.update(self.function_map)

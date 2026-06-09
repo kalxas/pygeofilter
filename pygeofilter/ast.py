@@ -704,7 +704,9 @@ def get_repr(node: Node, indent_amount: int = 0, indent_incr: int = 4) -> str:
             args.append(
                 "(\n{}\n)".format(
                     indent(
-                        get_repr(sub_node, indent_amount + indent_incr, indent_incr),
+                        get_repr(
+                            sub_node, indent_amount + indent_incr, indent_incr
+                        ),
                         indent_amount + indent_incr,
                     )
                 )

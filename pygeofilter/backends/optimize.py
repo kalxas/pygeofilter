@@ -71,7 +71,11 @@ def is_geometry_literal(value):
 
 
 def is_any_literal(value):
-    return is_literal(value) or is_temporal_literal(value) or is_geometry_literal(value)
+    return (
+        is_literal(value)
+        or is_temporal_literal(value)
+        or is_geometry_literal(value)
+    )
 
 
 def to_geometry(value):

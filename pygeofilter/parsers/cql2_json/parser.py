@@ -106,11 +106,15 @@ def walk_cql_json(node: JsonType):  # noqa: C901
     elif "function" in node:
         return ast.Function(
             node["function"]["name"],
-            cast(List[ast.AstType], walk_cql_json(node["function"]["arguments"])),
+            cast(
+                List[ast.AstType], walk_cql_json(node["function"]["arguments"])
+            ),
         )
 
     elif "lower" in node:
-        return ast.Function("lower", [cast(ast.Node, walk_cql_json(node["lower"]))])
+        return ast.Function(
+            "lower", [cast(ast.Node, walk_cql_json(node["lower"]))]
+        )
 
     elif "op" in node:
         op = node["op"]
@@ -157,9 +161,11 @@ def walk_cql_json(node: JsonType):  # noqa: C901
                 cast(List[ast.AstType], walk_cql_json(args[1])),
                 not_=False,
             )
-        
+
         elif op == "casei":
-            return ast.Function("lower", [cast(ast.Node, walk_cql_json(args[0]))])
+            return ast.Function(
+                "lower", [cast(ast.Node, walk_cql_json(args[0]))]
+            )
 
         elif op in BINARY_OP_PREDICATES_MAP:
             args = [cast(ast.Node, walk_cql_json(arg)) for arg in args]

@@ -107,7 +107,9 @@ class GeoPandasEvaluator(Evaluator):
 
     @handle(ast.BBox)
     def bbox(self, node, lhs):
-        return filters.bbox(lhs, node.minx, node.miny, node.maxx, node.maxy, node.crs)
+        return filters.bbox(
+            lhs, node.minx, node.miny, node.maxx, node.maxy, node.crs
+        )
 
     @handle(ast.Attribute)
     def attribute(self, node):

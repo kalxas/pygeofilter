@@ -27,16 +27,15 @@ def parse_geometry(geom: dict):
     wkt = shape(geom).wkt
     return func.ST_GeomFromEWKT(f"SRID={srid};{wkt}")
 
+
 # TODO: map functions
-function_map = {
-    "lower": func.lower
-}
+function_map = {"lower": func.lower}
+
 
 # ------------------------------------------------------------------------------
 # Filters
 # ------------------------------------------------------------------------------
 class Operator:
-
     OPERATORS: Dict[str, Callable] = {
         "is_null": lambda f, a=None: f.is_(None),
         "is_not_null": lambda f, a=None: f.isnot(None),

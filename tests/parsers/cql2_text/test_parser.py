@@ -1,23 +1,25 @@
-from datetime import datetime, timedelta, date
+from datetime import date, datetime, timedelta
 
 from dateparser.timezone_parser import StaticTzInfo
 
 from pygeofilter import ast, values
 from pygeofilter.parsers.cql2_text import parse
 
+
 def test_intersect_bbox():
     result = parse("S_INTERSECTS(geometry,BBOX(-180,-90,180,90))")
     assert result == ast.GeometryIntersects(
-        ast.Attribute("geometry"),
-        values.Envelope(-180, 180, -90, 90)
+        ast.Attribute("geometry"), values.Envelope(-180, 180, -90, 90)
     )
+
 
 def test_intersect_point():
     result = parse("S_INTERSECTS(geometry,POINT(7.02 49.92))")
     assert result == ast.GeometryIntersects(
         ast.Attribute("geometry"),
-        values.Geometry({'type': 'Point', 'coordinates': (7.02, 49.92)})
+        values.Geometry({"type": "Point", "coordinates": (7.02, 49.92)}),
     )
+
 
 def test_attribute_eq_true_uppercase():
     result = parse("attr = TRUE")
@@ -214,12 +216,14 @@ def test_attribute_before():
         datetime(2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))),
     )
 
+
 def test_attribute_lt_date():
     result = parse("attr < DATE('2000-01-01')")
     assert result == ast.LessThan(
         ast.Attribute("attr"),
         date(2000, 1, 1),
     )
+
 
 def test_attribute_t_intersects():
     # Using INTERVAL function with properly quoted timestamps
@@ -229,8 +233,12 @@ def test_attribute_t_intersects():
     assert result == ast.TimeOverlaps(
         ast.Attribute("attr"),
         values.Interval(
-            datetime(2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))),
-            datetime(2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
+            datetime(
+                2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
         ),
     )
 
@@ -242,8 +250,12 @@ def test_attribute_tintersects_dt_dr():
     assert result == ast.TimeOverlaps(
         ast.Attribute("attr"),
         values.Interval(
-            datetime(2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))),
-            datetime(2000, 1, 1, 0, 0, 4, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
+            datetime(
+                2000, 1, 1, 0, 0, 4, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
         ),
     )
 
@@ -409,7 +421,9 @@ def test_complex_expression():
     assert isinstance(result, ast.And)
     assert isinstance(result.lhs, ast.And)
     assert isinstance(result.lhs.lhs, ast.And)
-    assert result.lhs.lhs.lhs == ast.Equal(ast.Attribute("collection"), "landsat8_l1tp")
+    assert result.lhs.lhs.lhs == ast.Equal(
+        ast.Attribute("collection"), "landsat8_l1tp"
+    )
     assert result.lhs.lhs.rhs == ast.LessEqual(ast.Attribute("gsd"), 30)
     assert result.lhs.rhs == ast.LessEqual(ast.Attribute("eo:cloud_cover"), 10)
     # The exact datetime comparison depends on implementation details
@@ -450,6 +464,7 @@ def test_casei_like():
     assert result.pattern.name == "lower"
     assert result.pattern.arguments == ["coolsat"]
 
+
 def test_casei_notlike():
     result = parse("CASEI(provider) NOT LIKE CASEI('coolsat')")
     # Assuming CASEI maps to 'lower' in the implementation
@@ -460,20 +475,17 @@ def test_casei_notlike():
     assert result.pattern.name == "lower"
     assert result.pattern.arguments == ["coolsat"]
 
+
 def test_not_gt():
     result = parse("NOT(attr > 2)")
-    assert result == ast.Not(
-        ast.GreaterThan(ast.Attribute("attr"), 2)
-    )
+    assert result == ast.Not(ast.GreaterThan(ast.Attribute("attr"), 2))
+
 
 def test_not_lt():
     result = parse("NOT(attr < 2)")
-    assert result == ast.Not(
-        ast.LessThan(ast.Attribute("attr"), 2)
-    )
+    assert result == ast.Not(ast.LessThan(ast.Attribute("attr"), 2))
+
 
 def test_not_eq():
     result = parse("NOT(attr = 2)")
-    assert result == ast.Not(
-        ast.Equal(ast.Attribute("attr"), 2)
-    )
+    assert result == ast.Not(ast.Equal(ast.Attribute("attr"), 2))

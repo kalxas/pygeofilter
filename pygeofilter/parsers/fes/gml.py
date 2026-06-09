@@ -21,10 +21,12 @@ def _parse_time_instant(node: Element, nsmap: Dict[str, str]) -> datetime:
 
 def _parse_time_period(node: Element, nsmap: Dict[str, str]) -> values.Interval:
     begin = node.xpath(
-        "gml:begin/gml:TimeInstant/gml:timePosition|gml:beginPosition", namespaces=nsmap
+        "gml:begin/gml:TimeInstant/gml:timePosition|gml:beginPosition",
+        namespaces=nsmap,
     )[0]
     end = node.xpath(
-        "gml:end/gml:TimeInstant/gml:timePosition|gml:endPosition", namespaces=nsmap
+        "gml:end/gml:TimeInstant/gml:timePosition|gml:endPosition",
+        namespaces=nsmap,
     )[0]
     return values.Interval(
         _parse_time_position(begin, nsmap),
