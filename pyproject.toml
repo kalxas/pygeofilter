@@ -46,6 +46,7 @@ dev = [
 ]
 test = [
     "pytest",
+    "pytest-cov",
     "pytest-django",
     "django",
     "geoalchemy2",
@@ -104,3 +105,4 @@ ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+addopts = ["--cov=pygeofilter", "--cov-report=term-missing"]
