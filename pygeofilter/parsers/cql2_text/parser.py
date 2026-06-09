@@ -190,7 +190,7 @@ class CQLTransformer(WKTTransformer, ISO8601Transformer):
     def geometry(self, value):
         return values.Geometry(value)
 
-    def envelope(self, x1, x2, y1, y2):
+    def bbox(self, x1, y1, x2, y2):
         return values.Envelope(x1, x2, y1, y2)
 
     def interval(self, start, end):
