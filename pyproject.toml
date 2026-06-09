@@ -37,7 +37,7 @@ backend-elasticsearch = ["elasticsearch", "elasticsearch-dsl"]
 backend-opensearch = ["opensearch-py", "opensearch-dsl"]
 fes = ["pygml>=0.2"]
 dev = [
-    "flake8",
+    "ruff",
     "pytest",
     "pytest-django",
     "mypy<=1.10.0",
@@ -85,15 +85,19 @@ include = ["pygeofilter*"]
 [tool.setuptools.package-data]
 pygeofilter = ["py.typed", "**/*.lark"]
 
-[tool.isort]
-profile = "black"
-default_section = "THIRDPARTY"
+[tool.ruff]
+target-version = "py39"
+line-length = 80
 
-[tool.flake8]
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "C90"]
 ignore = ["E501", "W503", "E203"]
-exclude = [".git", "__pycache__", "docs/conf.py", "old", "build", "dist"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["pygeofilter"]
+
+[tool.ruff.lint.mccabe]
 max-complexity = 12
-max-line-length = 80
 
 [tool.mypy]
 ignore_missing_imports = true
