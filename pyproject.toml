@@ -92,7 +92,7 @@ line-length = 80
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "C90"]
-ignore = ["E501", "W503", "E203"]
+ignore = ["E501", "E203"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["pygeofilter"]
