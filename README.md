@@ -398,3 +398,10 @@ ATTRIBUTE attr < (
 >>> print(ast.get_repr(optimized_root))
 ATTRIBUTE attr < -5.529836140908493
 ```
+
+## Releasing
+
+To make a new release:
+
+- Go to https://github.com/geopython/pygeofilter/actions/workflows/release.yml
+- from the "Run workflow" dropdown on the right, select the branch to base the release on, and specify the new version accordingly (convention is `vx.y.z`, [i.e. v0.4.0])
