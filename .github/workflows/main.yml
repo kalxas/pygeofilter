@@ -19,10 +19,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y binutils gdal-bin libgdal-dev libproj-dev libsqlite3-mod-spatialite spatialite-bin
-        pip3 install -r requirements-test.txt
-        pip3 install -r requirements-dev.txt
         pip3 install gdal=="`gdal-config --version`.*"
-        pip3 install .
+        pip3 install ".[test,dev,fes,backend-django,backend-sqlalchemy,backend-native,backend-elasticsearch,backend-opensearch]"
     - name: Configure sysctl limits
       run: |
         sudo swapoff -a
