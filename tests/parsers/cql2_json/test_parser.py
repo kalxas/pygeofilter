@@ -148,16 +148,21 @@ def test_attribute_is_null():
     result = parse({"op": "isNull", "args": [{"property": "attr"}]})
     assert result == ast.IsNull(ast.Attribute("attr"), False)
 
+
 def test_attribute_casei():
     result = parse('{"op": "casei", "args": [{"property": "attr"}]}')
     assert result == ast.Function("lower", [ast.Attribute("attr")])
+
 
 def test_literal_casei():
     result = parse('{"op": "casei", "args": ["literal"]}')
     assert result == ast.Function("lower", ["literal"])
 
+
 def test_like_casei():
-    result = parse('{"op": "like", "args": [ {"op": "casei", "args": [{"property": "stringattr"}]}, {"op": "casei", "args": ["AAA"]} ] }')
+    result = parse(
+        '{"op": "like", "args": [ {"op": "casei", "args": [{"property": "stringattr"}]}, {"op": "casei", "args": ["AAA"]} ] }'
+    )
     assert result == ast.Like(
         ast.Function("lower", [ast.Attribute("stringattr")]),
         ast.Function("lower", ["AAA"]),
@@ -167,6 +172,7 @@ def test_like_casei():
         singlechar=".",
         escapechar="\\",
     )
+
 
 def test_attribute_before():
     result = parse(
@@ -212,8 +218,12 @@ def test_attribute_after_dt_dt():
     assert result == ast.TimeAfter(
         ast.Attribute("attr"),
         values.Interval(
-            datetime(2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))),
-            datetime(2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
+            datetime(
+                2000, 1, 1, 0, 0, 1, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
         ),
     )
 
@@ -231,7 +241,9 @@ def test_meets_dt_dr():
     assert result == ast.TimeMeets(
         ast.Attribute("attr"),
         values.Interval(
-            datetime(2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 0, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
             timedelta(seconds=4),
         ),
     )
@@ -251,7 +263,9 @@ def test_attribute_metby_dr_dt():
         ast.Attribute("attr"),
         values.Interval(
             timedelta(seconds=4),
-            datetime(2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
         ),
     )
 
@@ -270,7 +284,9 @@ def test_attribute_toverlaps_open_dt():
         ast.Attribute("attr"),
         values.Interval(
             None,
-            datetime(2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
         ),
     )
 
@@ -288,7 +304,9 @@ def test_attribute_overlappedby_dt_open():
     assert result == ast.TimeOverlappedBy(
         ast.Attribute("attr"),
         values.Interval(
-            datetime(2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))),
+            datetime(
+                2000, 1, 1, 0, 0, 3, tzinfo=StaticTzInfo("Z", timedelta(0))
+            ),
             None,
         ),
     )
@@ -298,7 +316,9 @@ def test_attribute_overlappedby_dt_open():
 
 
 def test_attribute_aequals():
-    result = parse({"op": "a_equals", "args": [{"property": "arrayattr"}, [1, 2, 3]]})
+    result = parse(
+        {"op": "a_equals", "args": [{"property": "arrayattr"}, [1, 2, 3]]}
+    )
     assert result == ast.ArrayEquals(
         ast.Attribute("arrayattr"),
         [1, 2, 3],
@@ -306,7 +326,9 @@ def test_attribute_aequals():
 
 
 def test_attribute_aoverlaps():
-    result = parse({"op": "a_overlaps", "args": [{"property": "arrayattr"}, [1, 2, 3]]})
+    result = parse(
+        {"op": "a_overlaps", "args": [{"property": "arrayattr"}, [1, 2, 3]]}
+    )
     assert result == ast.ArrayOverlaps(
         ast.Attribute("arrayattr"),
         [1, 2, 3],
@@ -314,7 +336,9 @@ def test_attribute_aoverlaps():
 
 
 def test_attribute_acontains():
-    result = parse({"op": "a_contains", "args": [{"property": "arrayattr"}, [1, 2, 3]]})
+    result = parse(
+        {"op": "a_contains", "args": [{"property": "arrayattr"}, [1, 2, 3]]}
+    )
     assert result == ast.ArrayContains(
         ast.Attribute("arrayattr"),
         [1, 2, 3],
@@ -369,7 +393,9 @@ def test_disjoint_linestring_attr():
     )
     assert result == ast.GeometryDisjoint(
         values.Geometry(
-            normalize_geom(geometry.LineString([(1, 1), (2, 2)]).__geo_interface__),
+            normalize_geom(
+                geometry.LineString([(1, 1), (2, 2)]).__geo_interface__
+            ),
         ),
         ast.Attribute("geometry"),
     )
@@ -393,7 +419,9 @@ def test_contains_attr_polygon():
         ast.Attribute("geometry"),
         values.Geometry(
             normalize_geom(
-                geometry.Polygon([(1, 1), (2, 2), (0, 3), (1, 1)]).__geo_interface__
+                geometry.Polygon(
+                    [(1, 1), (2, 2), (0, 3), (1, 1)]
+                ).__geo_interface__
             ),
         ),
     )

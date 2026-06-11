@@ -54,7 +54,8 @@ def test_combination():
     # can' reduce
     result = optimize(parse("attr = 1 AND other = 2"))
     assert result == ast.And(
-        ast.Equal(ast.Attribute("attr"), 1), ast.Equal(ast.Attribute("other"), 2)
+        ast.Equal(ast.Attribute("attr"), 1),
+        ast.Equal(ast.Attribute("other"), 2),
     )
 
     # reduce AND to an INCLUDE if both sides evaluate to true
@@ -122,7 +123,9 @@ def test_like():
     # allow reduction
     result = optimize(parse("'This is a test' LIKE 'This is %' AND attr = 1"))
     assert result == ast.Equal(ast.Attribute("attr"), 1)
-    result = optimize(parse("'This is a test' LIKE 'This is . test' AND attr = 1"))
+    result = optimize(
+        parse("'This is a test' LIKE 'This is . test' AND attr = 1")
+    )
     assert result == ast.Equal(ast.Attribute("attr"), 1)
 
     # don't reduction when an attribute is referenced
@@ -215,10 +218,13 @@ def test_function():
     # can't optimize a function referencing an attribute
     result = optimize(parse("attr = myadder(other, 2)"), {"myadder": myadder})
     assert result == ast.Equal(
-        ast.Attribute("attr"), ast.Function("myadder", [ast.Attribute("other"), 2])
+        ast.Attribute("attr"),
+        ast.Function("myadder", [ast.Attribute("other"), 2]),
     )
     # can't optimize a function with a nested reference to an attribute
-    result = optimize(parse("attr = myadder(other + 2, 2)"), {"myadder": myadder})
+    result = optimize(
+        parse("attr = myadder(other + 2, 2)"), {"myadder": myadder}
+    )
     assert result == ast.Equal(
         ast.Attribute("attr"),
         ast.Function("myadder", [ast.Add(ast.Attribute("other"), 2), 2]),
