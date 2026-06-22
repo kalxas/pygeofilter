@@ -22,12 +22,12 @@ Build-Depends: debhelper-compat (= 13),
                python3-pyproj <!nocheck>,
                python3-requests <!nocheck>,
                python3-rtree <!nocheck>,
-               python3-setuptools,
                python3-shapely,
                python3-sqlalchemy,
                python3-pygml,
                python3-pytest <!nocheck>,
-	       python3-pytest-django <!nocheck>
+               python3-pytest-cov <!nocheck>,
+               python3-pytest-django <!nocheck>
 Standards-Version: 4.7.2
 Testsuite: autopkgtest-pkg-pybuild
 Homepage: https://github.com/geopython/pygeofilter
